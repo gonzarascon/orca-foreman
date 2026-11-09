@@ -1,0 +1,98 @@
+{
+  "manifestVersion": 2,
+  "id": "foreman",
+  "name": "Foreman",
+  "version": "0.1.0",
+  "description": "A chief-of-staff agent for Orca: send it Linear tickets and it runs supervised workers for them, keeping everything that needs you in one queue.",
+  "repository": "https://github.com/gonzarascon/orca-foreman",
+  "engines": {
+    "orca": ">=1.4.248"
+  },
+  "execution": "trusted-worker",
+  "pluginApi": 1,
+  "main": "src/worker.ts",
+  "contributes": {
+    "panels": [
+      {
+        "id": "foreman",
+        "title": "Foreman",
+        "icon": "agent",
+        "entry": "src/panel.tsx",
+        "ui": "components"
+      }
+    ],
+    "settings": [
+      {
+        "key": "home",
+        "title": "Home folder",
+        "description": "The Foreman's own folder, outside any repo. Created if missing and added to Orca as a folder project. Holds the tickets you sent, its preferences, repo map and worker specs.",
+        "type": "string",
+        "default": "~/.foreman"
+      },
+      {
+        "key": "linearTeam",
+        "title": "Linear team",
+        "description": "Limits “Your open tickets” in the panel to this team. Leave empty for every team. Search always covers all of Linear.",
+        "type": "string",
+        "default": "",
+        "placeholder": "ENG"
+      },
+      {
+        "key": "workingState",
+        "title": "Working state",
+        "description": "Workflow state the Foreman moves a ticket to when its worker starts.",
+        "type": "string",
+        "default": "In Progress"
+      },
+      {
+        "key": "reviewState",
+        "title": "Review state",
+        "description": "Workflow state workers move a ticket to when it needs you: a PR to review or a question to answer.",
+        "type": "string",
+        "default": "In Review"
+      },
+      {
+        "key": "maxWorkers",
+        "title": "Max parallel workers",
+        "type": "integer",
+        "default": 3,
+        "minimum": 1,
+        "maximum": 20
+      },
+      {
+        "key": "agent",
+        "title": "Agent",
+        "description": "Orca agent id for the Foreman and its workers, as `orca agent launch --agent` takes it.",
+        "type": "string",
+        "default": "claude"
+      },
+      {
+        "key": "orcaCli",
+        "title": "Orca CLI",
+        "description": "Command or absolute path of the `orca` CLI the worker runs to read Linear and add the home folder.",
+        "type": "string",
+        "default": "orca"
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "kind": "settings:own"
+    },
+    {
+      "kind": "storage:own"
+    },
+    {
+      "kind": "workspace:read"
+    },
+    {
+      "kind": "workspace:write"
+    },
+    {
+      "kind": "agent:read"
+    },
+    {
+      "kind": "agent:launch"
+    }
+  ]
+}
